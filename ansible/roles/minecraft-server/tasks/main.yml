@@ -37,7 +37,7 @@
 - name: Copy Minecraft Bedrock zip
   copy:
     src: ../files/bedrock-server.zip
-    dest: /home/ubuntu/bedrock-server
+    dest: /home/ubuntu/bedrock-server.zip
     owner: ubuntu
     group: ubuntu
 
