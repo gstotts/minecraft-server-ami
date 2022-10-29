@@ -131,6 +131,7 @@ build {
 
   provisioner "shell" {
     inline = [
+      "echo 'Sleeping to allow cloud-init to finish'; sleep 60",
       "sudo apt-add-repository -y ppa:ansible/ansible",
       "sudo apt-get update && sudo apt-get -y install ansible"
     ]
