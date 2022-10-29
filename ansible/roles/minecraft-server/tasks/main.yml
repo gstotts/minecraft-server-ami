@@ -1,0 +1,101 @@
+- name: Update apt repo and cache
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+    cache_valid_time: 3600
+
+- name: Upgrade all packages
+  apt:
+    upgrade: dist
+    force_apt_get: yes
+
+- name: Install zip package
+  apt:
+    name:
+      - zip
+      - unzip
+    state: present
+    force_apt_get: yes
+
+- name: Download the CloudWatch agent
+  command: 'wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb'
+
+- name: Install the CloudWatch agent
+  command: 'sudo dpkg -i -E ./amazon-cloudwatch-agent.deb'
+  become_user: root
+
+- name: Copy the CloudWatch agent config JSON
+  copy:
+    src: ../files/cloudwatch-agent.json
+    dest: /opt/aws/amazon-cloudwatch-agent/bin/config.json
+    owner: root
+    group: root
+
+- name: Run CloudWatch agent with config
+  command: '/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -cfile:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s'
+
+- name: Copy Minecraft Bedrock zip
+  copy:
+    src: ../files/bedrock-server.zip
+    dest: /home/ubuntu/bedrock-server
+    owner: ubuntu
+    group: ubuntu
+
+- name: Unzip Minecraft Bedrock Zip
+  command: 'unzip /home/ubuntu/bedrock-server.zip -d /home/ubuntu/bedrock-server'
+
+- name: Add allowlist.json with Given Data
+  template:
+    src: ../files/allowlist.json.j2
+    dest: /home/ubuntu/bedrock-server/allowlist.json
+    group: ubuntu
+    owner: ubuntu
+    force: yes
+
+- name: Add permissions.json with Given Data
+  template:
+    src: ../files/permissions.json.j2
+    dest: /home/ubuntu/bedrock-server/permissions.json
+    group: ubuntu
+    owner: ubuntu
+    force: yes
+
+- name: Override server.properties with Given Data
+  lineinfile:
+    path: /home/ubuntu/bedrock-server/server.properties
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.value }}'
+    backrefs: yes
+  with_items:
+    - { regexp: 'server-name=.*', value: 'server-name={{ minecraft_server_name }}'}
+    - { regexp: 'gamemode=.*', value: 'gamemode={{ minecraft_gamemode }}'}
+    - { regexp: 'difficulty=.*', value: 'difficulty={{ minecraft_difficulty }}'}
+    - { regexp: 'alllow-cheats=.*', value: 'allow-cheats={{ minecraft_allow_cheats }}'}
+    - { regexp: 'max-players=.*', value: 'max-players={{ minecraft_max_players }}'}
+    - { regexp: 'allow-list=.*', value: 'allow-list={{ minecraft_allow_list_enabled }}'}
+
+- name: Verify Ownership of bedrock-server Folder
+  command: 'chown -R ubuntu:ubuntu /home/ubuntu/bedrock-server'
+
+- name: Copy minecraft.service File
+  copy:
+    src: ../files/minecraft.service
+    dest: /etc/systemd/system/minecraft.service
+    owner: root
+    group: root
+
+- name: Copy minecraft.socket File
+  copy:
+    src: ../files/minecraft.socket
+    dest: /etc/systemd/system/minecraft.socket
+    owner: root
+    group: root
+
+- name: Reload systemd
+  command: 'sudo systemctl daemon-reload'
+
+- name: Enable the Minecraft Service
+  command: 'sudo systemctl enable /etc/systemd/system/minecraft.service'
+
+- name: Start the Minecraft Service
+  command: 'sudo systemctl start minecraft'
