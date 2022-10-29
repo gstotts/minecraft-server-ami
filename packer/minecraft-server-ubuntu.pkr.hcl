@@ -142,14 +142,14 @@ build {
 
     extra_arguments = [
       "--extra-vars",
-      "minecraft_server_name=${var.minecraft_server_name}",
+      "'minecraft_server_name=${var.minecraft_server_name}",
       "minecraft_gamemode=${var.minecraft_gamemode}",
       "minecraft_difficulty=${var.minecraft_difficulty}",
       "minecraft_max_players=${var.minecraft_max_players}",
       "minecraft_allow_cheats=${var.minecraft_allow_cheats}",
       "minecraft_allow_list_enabled=${var.minecraft_allow_list_enabled}",
       join("=", ["allowed_users", jsonencode("${var.allowed_user_list}")]),
-      join("=", ["permissions_list", jsonencode("${var.permissions_list}")])
+      join("", [ join("=", ["permissions_list", jsonencode("${var.permissions_list}")]), "'" ])
     ]
   }
 }
