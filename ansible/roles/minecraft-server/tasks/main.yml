@@ -70,7 +70,7 @@
     - { regexp: 'server-name=.*', value: 'server-name={{ minecraft_server_name }}'}
     - { regexp: 'gamemode=.*', value: 'gamemode={{ minecraft_gamemode }}'}
     - { regexp: 'difficulty=.*', value: 'difficulty={{ minecraft_difficulty }}'}
-    - { regexp: 'alllow-cheats=.*', value: 'allow-cheats={{ minecraft_allow_cheats }}'}
+    - { regexp: 'allow-cheats=.*', value: 'allow-cheats={{ minecraft_allow_cheats }}'}
     - { regexp: 'max-players=.*', value: 'max-players={{ minecraft_max_players }}'}
     - { regexp: 'allow-list=.*', value: 'allow-list={{ minecraft_allow_list_enabled }}'}
 
