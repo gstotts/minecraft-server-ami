@@ -131,6 +131,7 @@ source "amazon-ebs" "ubuntu" {
   subnet_id                   = "${var.subnet_id}"
   associate_public_ip_address = true
 
+  tags = {"Name": "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"}
   snapshot_tags = {"Name": "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"}
 
   source_ami_filter {
