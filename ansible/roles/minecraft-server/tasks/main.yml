@@ -34,10 +34,12 @@
 - name: Run CloudWatch agent with config
   command: '/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -cfile:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s'
 
-- name: Copy Minecraft Bedrock zip
-  copy:
-    src: ../files/bedrock-server.zip
-    dest: /home/ubuntu/bedrock-server.zip
+- name: Download Minecraft Bedrock zip
+  command: 'wget https://minecraft.azureedge.net/bin-linux/bedrock-server-{{ bedrock_server_version}}.zip -O /home/ubuntu/bedrock-server.zip'
+
+- name: Set Minecraft Bedrock Server Zip Ownership
+  file:
+    path: /home/ubuntu/bedrock-server.zip
     owner: ubuntu
     group: ubuntu
 
