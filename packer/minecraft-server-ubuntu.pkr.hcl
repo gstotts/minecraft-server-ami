@@ -97,7 +97,7 @@ variable "source_ami_filter_owner" {
 
 variable "instance_type" {
   type    = string
-  default = "t2.micro"
+  default = "t3.small"
 }
 
 variable "ssh_username" {
@@ -105,10 +105,21 @@ variable "ssh_username" {
   default = "ubuntu"
 }
 
+variable "vpc_id" {
+  type = string
+}
+
+variable "subnet_id" {
+  type = string
+}
+
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"
-  instance_type = "${var.instance_type}"
-  region        = "${var.aws_region}"
+  ami_name                    = "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"
+  instance_type               = "${var.instance_type}"
+  region                      = "${var.aws_region}"
+  vpc_id                      = "${var.vpc_id}"
+  subnet_id                   = "${var.subnet_id}"
+  associate_public_ip_address = true
 
   source_ami_filter {
     filters = {
@@ -150,7 +161,7 @@ build {
       "minecraft_allow_cheats=${var.minecraft_allow_cheats}",
       "minecraft_allow_list_enabled=${var.minecraft_allow_list_enabled}",
       join("=", ["allowed_users", jsonencode("${var.allowed_user_list}")]),
-      join("", [ join("=", ["permissions_list", jsonencode("${var.permissions_list}")]), "'" ])
+      join("", [join("=", ["permissions_list", jsonencode("${var.permissions_list}")]), "'"])
     ]
   }
 }
