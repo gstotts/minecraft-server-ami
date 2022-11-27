@@ -9,6 +9,12 @@ packer {
 
 // Minecraft Settings Variables
 
+variable "bedrock_server_version" {
+  type        = string
+  description = "The version of bedrock server to download and install"
+  default     = "1.19.41.01"
+}
+
 variable "minecraft_server_name" {
   type        = string
   description = "The name of the server to be added to server.properties"
@@ -121,6 +127,8 @@ source "amazon-ebs" "ubuntu" {
   subnet_id                   = "${var.subnet_id}"
   associate_public_ip_address = true
 
+  snapshot_tags = "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"
+
   source_ami_filter {
     filters = {
       name                = "${var.source_ami_filter_name}"
@@ -154,7 +162,8 @@ build {
 
     extra_arguments = [
       "--extra-vars",
-      "'minecraft_server_name=${var.minecraft_server_name}",
+      "'bedrock_server_version=${var.bedrock_server_version}",
+      "minecraft_server_name=${var.minecraft_server_name}",
       "minecraft_gamemode=${var.minecraft_gamemode}",
       "minecraft_difficulty=${var.minecraft_difficulty}",
       "minecraft_max_players=${var.minecraft_max_players}",
