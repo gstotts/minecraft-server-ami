@@ -68,6 +68,10 @@ variable "minecraft_allow_list_enabled" {
   }
 }
 
+variable "minecraft_backup_s3_bucket" {
+  type = string
+}
+
 variable "allowed_user_list" {
   type    = list(map(string))
   default = []
@@ -127,7 +131,7 @@ source "amazon-ebs" "ubuntu" {
   subnet_id                   = "${var.subnet_id}"
   associate_public_ip_address = true
 
-  snapshot_tags = "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"
+  snapshot_tags = {"Name": "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"}
 
   source_ami_filter {
     filters = {
@@ -163,6 +167,7 @@ build {
     extra_arguments = [
       "--extra-vars",
       "'bedrock_server_version=${var.bedrock_server_version}",
+      "backup_bucket_name=${var.minecraft_backup_s3_bucket}",
       "minecraft_server_name=${var.minecraft_server_name}",
       "minecraft_gamemode=${var.minecraft_gamemode}",
       "minecraft_difficulty=${var.minecraft_difficulty}",
