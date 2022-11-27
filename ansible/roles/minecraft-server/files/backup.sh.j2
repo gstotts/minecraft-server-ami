@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "save hold" > /run/minecraft.stdin
+sleep 30
+echo "save query" > /run/minecraft.stdin
+zip -r worlds.zip /home/ubuntu/bedrock-server/worlds 
+chown ubuntu:ubuntu worlds.zip 
+aws s3 cp worlds.zip s3://{{ backup_bucket_name }}/worlds.zip
+echo "save resume" > /run/minecraft.stdin

@@ -9,9 +9,10 @@
     upgrade: dist
     force_apt_get: yes
 
-- name: Install zip package
+- name: Install packages
   apt:
     name:
+      - awscli
       - zip
       - unzip
     state: present
@@ -101,3 +102,20 @@
 
 - name: Start the Minecraft Service
   command: 'sudo systemctl start minecraft'
+
+- name: Copy backup script
+  template:
+      src: ../files/backup.sh.j2
+      dest: /home/ubuntu/bedrock-server/backup.sh
+      group: root
+      owner: root
+      force: yes
+  
+- name: Set Cron for Backup
+  cron:
+    name: "Backup Cron Job"
+    state: present
+    weekday: "0"
+    hour: "7"
+    minute: "0"
+    job: "/home/ubuntu/bedrock-server/backup.sh"
