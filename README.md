@@ -8,9 +8,11 @@ Uses packer to build an AMI for a minecraft server of given settings.
 ```hcl
 aws_region                   = "us-east-1"
 ami_name_prefix              = "minecraft-server-ubuntu"
+vpc_id                       = "vpc-01231223123123123123"
+subnet_id                    = "subnet-001231231231231231"
 source_ami_filter_name       = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
 source_ami_filter_owner      = "099720109477"
-instance_type                = "t2.micro"
+instance_type                = "t3.small"
 minecraft_server_name        = "my_minecraft_server"
 minecraft_gamemode           = "survival"
 minecraft_difficulty         = "normal"
