@@ -107,8 +107,8 @@
   template:
       src: ../files/backup.sh.j2
       dest: /home/ubuntu/bedrock-server/backup.sh
-      group: root
-      owner: root
+      group: ubuntu
+      owner: ubuntu
       force: yes
   
 - name: Set Cron for Backup
