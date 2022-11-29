@@ -109,6 +109,7 @@
       dest: /home/ubuntu/bedrock-server/backup.sh
       group: ubuntu
       owner: ubuntu
+      mode: 775
       force: yes
   
 - name: Set Cron for Backup
