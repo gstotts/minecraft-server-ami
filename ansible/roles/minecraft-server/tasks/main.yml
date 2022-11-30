@@ -109,8 +109,10 @@
       dest: /home/ubuntu/bedrock-server/backup.sh
       group: ubuntu
       owner: ubuntu
-      mode: 775
       force: yes
+
+- name: Chmod for backup.sh
+  command: 'chmod +x /home/ubuntu/bedrock-server/backup.sh'
   
 - name: Set Cron for Backup
   cron:
