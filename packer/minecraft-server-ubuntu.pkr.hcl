@@ -130,6 +130,8 @@ source "amazon-ebs" "ubuntu" {
   vpc_id                      = "${var.vpc_id}"
   subnet_id                   = "${var.subnet_id}"
   associate_public_ip_address = true
+  encrypt_boot = true
+  
 
   tags = {"Name": "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"}
   snapshot_tags = {"Name": "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"}
