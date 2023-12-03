@@ -1,7 +1,7 @@
 packer {
   required_plugins {
     amazon = {
-      version = "~> 1"
+      version = "~> 1.2.2"
       source  = "github.com/hashicorp/amazon"
     }
     ansible = {
@@ -134,7 +134,8 @@ source "amazon-ebs" "ubuntu" {
   vpc_id                      = "${var.vpc_id}"
   subnet_id                   = "${var.subnet_id}"
   associate_public_ip_address = true
-  encrypt_boot = true
+  encrypt_boot                = true
+  imds_support                = "v2.0"
   
 
   tags = {"Name": "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"}
