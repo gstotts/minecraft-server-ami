@@ -6,7 +6,7 @@ packer {
     }
     ansible = {
       version = "~> 1"
-      source = "github.com/hashicorp/ansible"
+      source  = "github.com/hashicorp/ansible"
     }
   }
 }
@@ -136,10 +136,10 @@ source "amazon-ebs" "ubuntu" {
   associate_public_ip_address = true
   encrypt_boot                = true
   imds_support                = "v2.0"
-  
 
-  tags = {"Name": "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"}
-  snapshot_tags = {"Name": "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"}
+
+  tags          = { "Name" : "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}" }
+  snapshot_tags = { "Name" : "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}" }
 
   source_ami_filter {
     filters = {
@@ -152,6 +152,12 @@ source "amazon-ebs" "ubuntu" {
   }
 
   ssh_username = "${var.ssh_username}"
+
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 1
+  }
 }
 
 build {
