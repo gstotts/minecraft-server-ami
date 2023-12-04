@@ -128,7 +128,7 @@ variable "subnet_id" {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name                    = "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}"
+  ami_name                    = "${var.ami_name_prefix}"
   instance_type               = "${var.instance_type}"
   region                      = "${var.aws_region}"
   vpc_id                      = "${var.vpc_id}"
@@ -136,10 +136,11 @@ source "amazon-ebs" "ubuntu" {
   associate_public_ip_address = true
   encrypt_boot                = true
   imds_support                = "v2.0"
+  force_deregister            = true
 
 
-  tags          = { "Name" : "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}" }
-  snapshot_tags = { "Name" : "${var.ami_name_prefix}-{{isotime \"2006-01-02T03_04_05\"}}" }
+  tags          = { "Name" : "${var.ami_name_prefix}" }
+  snapshot_tags = { "Name" : "${var.ami_name_prefix}" }
 
   source_ami_filter {
     filters = {
