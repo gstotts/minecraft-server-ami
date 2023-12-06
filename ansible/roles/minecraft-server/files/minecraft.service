@@ -7,8 +7,10 @@ User=ubuntu
 Type=simple
 WorkingDirectory=/home/ubuntu/bedrock-server/
 ExecStart=/bin/bash -c "LD_LIBRARY_PATH=. ./bedrock_server 2>&1 | grep --line-buffered -v AutoCompaction | tee -a ./custom_log.txt"
+ExecStartPost=/bin/bash -c "python3 -m http.server 9362 &"
 ExecStop=/bin/bash -c "./backup.sh"
 ExecStop=/bin/bash -c "echo "stop" > /run/minecraft.stdin"
+ExecStopPost=/bin/bash -c "killall -9 python3"
 Restart=always
 RestartSec=30
 Sockets=minecraft.socket
