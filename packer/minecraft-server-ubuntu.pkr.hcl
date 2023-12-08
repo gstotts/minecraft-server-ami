@@ -138,6 +138,10 @@ source "amazon-ebs" "ubuntu" {
   imds_support                = "v2.0"
   force_deregister            = true
 
+  launch_block_device_mappings {
+    device_name = "/dev/sda1"
+    volume_type = "gp3"
+  }
 
   tags          = { "Name" : "${var.ami_name_prefix}" }
   snapshot_tags = { "Name" : "${var.ami_name_prefix}" }
